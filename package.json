@@ -1,7 +1,14 @@
 {
     "name": "auth-app",
     "version": "1.0.0",
+    "description": "Auth service for EKS",
+    "main": "app.js",
     "scripts": {
-        "start": "echo 'Hello EKS' && sleep 3600"
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "aws-sdk": "^2.1500.0",
+        "dotenv": "^17.3.1",
+        "express": "^4.18.2"
     }
 }

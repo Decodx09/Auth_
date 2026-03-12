@@ -1,7 +1,16 @@
-FROM node:18-slim
+# Step 1: Build stage
+FROM node:18-slim AS builder
 WORKDIR /app
 COPY package*.json ./
+# This installs your dependencies (including express)
 RUN npm install
 COPY . .
-EXPOSE 8080
-CMD ["node", "app.js"]
+
+# Step 2: Runtime stage
+FROM node:18-slim
+WORKDIR /app
+# CRITICAL: This copies EVERYTHING (including node_modules) from the builder
+COPY --from=builder /app .
+
+EXPOSE 3001
+CMD ["npm", "start"]
