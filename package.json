@@ -1,0 +1,7 @@
+{
+    "name": "auth-app",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "echo 'Hello EKS' && sleep 3600"
+    }
+}

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-app
+  template:
+    metadata:
+      labels:
+        app: auth-app
+    spec:
+      serviceAccountName: default # Important: This connects to the DynamoDB permission
+      containers:
+      - name: auth-container
+        image: 589578576300.dkr.ecr.us-east-2.amazonaws.com/project-app:latest # The CI/CD will update this
+        ports:
+        - containerPort: 3001 # Based on your user-service config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: auth-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3001
