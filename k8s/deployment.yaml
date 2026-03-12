@@ -12,21 +12,23 @@ spec:
       labels:
         app: auth-app
     spec:
-      serviceAccountName: default # Important: This connects to the DynamoDB permission
+      serviceAccountName: default # Connects your Pod to the DynamoDB IAM role
       containers:
       - name: auth-container
-        image: 589578576300.dkr.ecr.us-east-2.amazonaws.com/project-app:latest # The CI/CD will update this
+        # Use the specific tag or latest; GitHub Actions will handle the update
+        image: 589578576300.dkr.ecr.us-east-2.amazonaws.com/project-app:latest 
         ports:
-        - containerPort: 3001 # Based on your user-service config
+        - containerPort: 8080 # Matches your "Server is running on port 8080" log
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: auth-service
 spec:
-  type: NodePort # Change from LoadBalancer
+  type: LoadBalancer 
   selector:
     app: auth-app
   ports:
-    - port: 80
-      targetPort: 8080 # The port your app listens on
+    - protocol: TCP
+      port: 80         # The port you type into your browser (http://URL:80)
+      targetPort: 8080 # The port inside the container the traffic is sent to
