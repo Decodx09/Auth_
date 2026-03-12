@@ -24,10 +24,9 @@ kind: Service
 metadata:
   name: auth-service
 spec:
-  type: LoadBalancer
+  type: NodePort # Change from LoadBalancer
   selector:
     app: auth-app
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3001
+    - port: 80
+      targetPort: 8080 # The port your app listens on
