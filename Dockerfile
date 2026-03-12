@@ -12,5 +12,5 @@ WORKDIR /app
 # CRITICAL: This copies EVERYTHING (including node_modules) from the builder
 COPY --from=builder /app .
 
-EXPOSE 3001
+EXPOSE 8080
 CMD ["npm", "start"]
