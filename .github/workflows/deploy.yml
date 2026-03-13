@@ -33,7 +33,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$POST_REPOSITORY:$IMAGE_TAG
+          # FIXED: Changed $POST_REPOSITORY to $ECR_REPOSITORY
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "full_image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Set Target Cluster
@@ -49,6 +50,7 @@ jobs:
 
       - name: Deploy to EKS
         run: |
-          # Swap the placeholder for the real image URL
+          # Use a different delimiter for sed (using | instead of /) 
+          # because the image URL contains slashes
           sed -i "s|IMAGE_PLACEHOLDER|${{ steps.build-image.outputs.full_image }}|g" k8s/app.yaml
           kubectl apply -f k8s/app.yaml
